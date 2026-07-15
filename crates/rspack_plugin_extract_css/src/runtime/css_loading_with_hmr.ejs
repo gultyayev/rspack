@@ -32,8 +32,6 @@ var extractCssApplyHandler = function (options) {
 		var href = <%- HMR_MINI_CSS_FILENAMES %>[chunkId] || staleHref;
 		if (!href) return;
 		var fullhref = <%- PUBLIC_PATH %> + href;
-		if (seen[fullhref]) return;
-		seen[fullhref] = true;
 		/**
 			Find the currently installed stylesheet primarily by chunk identity (set on tags
 			this handler previously created), so repeated updates keep tracking the right tag
@@ -44,6 +42,16 @@ var extractCssApplyHandler = function (options) {
 		 */
 		var oldTag = extractCssFindStylesheet(staleHref, <%- PUBLIC_PATH %> + staleHref, chunkId);
 		if (!oldTag) return;
+		/**
+			Claim this href only once a chunk has actually resolved its installed tag. When
+			several chunks share one extracted stylesheet (see shared-stylesheet-dedup, #14793)
+			with a hashed filename, only the chunk whose identity is on the tag can find it
+			after the first swap; marking the href as seen before the lookup would let a sibling
+			that can't find the tag bail first and silently drop the whole update depending on
+			iteration order.
+		 */
+		if (seen[fullhref]) return;
+		seen[fullhref] = true;
 		promises.push(new Promise(function (resolve, reject) {
 			var tag = extractCssCreateStylesheet(
 				chunkId,

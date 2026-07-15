@@ -1529,6 +1529,12 @@ pub struct RenderManifestEntry {
   pub auxiliary: bool,
 }
 
+/// Name of the [`ManifestAssetType::Custom`] variant the extract-css plugin tags its
+/// emitted stylesheet assets with. It is a cross-crate protocol: the extract-css plugin
+/// writes it, and both the SRI plugin and the HMR plugin look assets up by it, so it
+/// lives here next to [`ManifestAssetType`] to keep the producers and consumers in sync.
+pub const EXTRACT_CSS_ASSET_TYPE_NAME: &str = "extract-css";
+
 #[cacheable]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum ManifestAssetType {

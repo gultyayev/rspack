@@ -7,10 +7,10 @@ use rspack_collections::IdentifierSet;
 use rspack_core::{
   AssetInfo, Chunk, ChunkGraph, ChunkKind, ChunkUkey, Compilation,
   CompilationAdditionalTreeRuntimeRequirements, CompilationAsset, CompilationParams,
-  CompilationProcessAssets, CompilationRecords, CompilerCompilation, DependencyType, LoaderContext,
-  ManifestAssetType, ModuleId, ModuleIdentifier, ModuleType, NormalModuleFactoryParser,
-  NormalModuleLoader, ParserAndGenerator, ParserOptions, PathData, Plugin, RunnerContext,
-  RuntimeGlobals, RuntimeModule, RuntimeModuleExt, RuntimeSpec,
+  CompilationProcessAssets, CompilationRecords, CompilerCompilation, DependencyType,
+  EXTRACT_CSS_ASSET_TYPE_NAME, LoaderContext, ManifestAssetType, ModuleId, ModuleIdentifier,
+  ModuleType, NormalModuleFactoryParser, NormalModuleLoader, ParserAndGenerator, ParserOptions,
+  PathData, Plugin, RunnerContext, RuntimeGlobals, RuntimeModule, RuntimeModuleExt, RuntimeSpec,
   chunk_graph_chunk::{ChunkId, ChunkIdSet},
   rspack_sources::{RawStringSource, SourceExt},
 };
@@ -526,11 +526,6 @@ impl Plugin for HotModuleReplacementPlugin {
     Ok(())
   }
 }
-
-// Matches the asset type extract-css tags its own emitted assets with
-// (see crates/rspack_plugin_extract_css/src/plugin.rs render_manifest, and the
-// equivalent lookup in rspack_plugin_sri/src/runtime.rs).
-const EXTRACT_CSS_ASSET_TYPE_NAME: &str = "extract-css";
 
 #[derive(Default)]
 struct HotUpdateContent {

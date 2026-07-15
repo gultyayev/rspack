@@ -1,7 +1,8 @@
 use rspack_core::{
   ChunkUkey, Compilation, CompilationAdditionalTreeRuntimeRequirements, CrossOriginLoading,
-  ManifestAssetType, RuntimeGlobals, RuntimeModule, RuntimeModuleExt, RuntimeModuleGenerateContext,
-  RuntimeTemplate, SourceType, chunk_graph_chunk::ChunkId, impl_runtime_module,
+  EXTRACT_CSS_ASSET_TYPE_NAME, ManifestAssetType, RuntimeGlobals, RuntimeModule, RuntimeModuleExt,
+  RuntimeModuleGenerateContext, RuntimeTemplate, SourceType, chunk_graph_chunk::ChunkId,
+  impl_runtime_module,
 };
 use rspack_error::{Result, error};
 use rspack_hook::plugin_hook;
@@ -143,7 +144,7 @@ impl RuntimeModule for SRIHashVariableRuntimeModule {
               SourceType::JavaScript => ManifestAssetType::JavaScript,
               SourceType::Css => ManifestAssetType::Css,
               SourceType::Custom(name) if name == "css/mini-extract" =>
-                ManifestAssetType::Custom("extract-css".into()),
+                ManifestAssetType::Custom(EXTRACT_CSS_ASSET_TYPE_NAME.into()),
               _ => ManifestAssetType::Unknown,
             },
             chunk_with_source_type,
